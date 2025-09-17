@@ -150,5 +150,5 @@ translator/
 
 ## 📄 License
 
-This personal project is for educational and linguistic research purposes only, for use as a third-party helper with phrase generation.
+This personal project is for educational and linguistic research purposes only, for use as a third-party helper with phrase generation, and is not meant for distribution.
 
