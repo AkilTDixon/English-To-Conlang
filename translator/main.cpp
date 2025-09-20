@@ -58,7 +58,6 @@ int main()
 	p.wordOrder();
 	p.directTranslate();
 	p.print();
-	//cout << b.getErindin(input);
 	
 
 	return 0;
