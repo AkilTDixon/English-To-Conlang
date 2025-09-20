@@ -5,13 +5,6 @@
 using namespace std;
 
 
-/*
-TO-DO
-
-Get a sentence, isolate each word, directly translate each one, put each word in a string and output
-
-*/
-
 int main()
 {
 	SetConsoleOutputCP(CP_UTF8);
