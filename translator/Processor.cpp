@@ -7,6 +7,13 @@ using namespace std;
 
 Database Processor::db;
 
+Processor::Processor()
+{
+	future = false;
+	past = false;
+}
+
+
 Processor::Processor(vector<string> s, bool n)
 {
 	negated = n;
@@ -14,10 +21,26 @@ Processor::Processor(vector<string> s, bool n)
 	past = false;
 	wordBuffer = s;
 
+	wordOrder();
 	
 	
 }
+void Processor::initialize(vector<string> s, bool n)
+{
+	if (!wordBuffer.empty())
+		wordBuffer.clear();
+	if (!translatedBuffer.empty())
+		translatedBuffer.clear();
 
+	future = false;
+	past = false;
+	negated = n;
+	for (auto word : s)
+		wordBuffer.push_back(word);
+
+	wordOrder();
+	
+}
 Processor::~Processor()
 {
 
@@ -62,7 +85,11 @@ void Processor::wordOrder()
 				middle = wordBuffer.begin() + i - 1;
 				indicesOfThe.erase(wordBuffer[i]);
 			}
-			rotate(wordBuffer.begin()+1, middle, middle + 1);
+			auto b = wordBuffer.begin() + 1;
+			if (!verb)
+				b = wordBuffer.begin();
+
+			rotate(b, middle, middle + 1);
 			subject = true;
 			break;
 		}
@@ -99,11 +126,10 @@ void Processor::wordOrder()
 	}
 
 
-
-
-
+	directTranslate();
 
 }
+
 void Processor::directTranslate()
 {
 	string subject = "";
@@ -297,5 +323,5 @@ void Processor::print()
 {
 	for (auto word : translatedBuffer)
 		cout << word << " ";
-	cout << endl;
+	cout << endl << endl;
 }

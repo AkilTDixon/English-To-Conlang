@@ -12,6 +12,8 @@ class Database;
 class Processor
 {
 public:
+
+	Processor();
 	Processor(vector<string>, bool);
 	~Processor();
 
@@ -24,6 +26,7 @@ public:
 	vector<string> translatedBuffer;
 
 
+	void initialize(vector<string>, bool);
 	void directTranslate();
 	void wordOrder();
 	void applyRules();
