@@ -59,7 +59,11 @@ void Processor::wordOrder()
 	for (int i = 0; i < wordBuffer.size(); i++)
 	{
 		if (wordBuffer[i] == "the" || wordBuffer[i] == "The" || wordBuffer[i] == "our" || wordBuffer[i] == "Our") {
-			indicesOfThe.insert(wordBuffer[i+1]);
+			if (string::npos != wordBuffer[i + 1].find("(spl)"))
+				wordBuffer.erase(wordBuffer.begin()+i);
+			else
+				indicesOfThe.insert(wordBuffer[i+1]);
+			
 		}
 	}
 
@@ -103,7 +107,7 @@ void Processor::wordOrder()
 		if (wordBuffer[i].find("(o)") != string::npos)
 		{
 			objectIndices.push_back(i);
-			break;
+			//break;
 			
 		}
 	}
@@ -114,9 +118,13 @@ void Processor::wordOrder()
 		for (int j = start; j < objectIndices[i]; j++)
 		{
 			if (wordBuffer[j].find("(adj)") != string::npos)
-				adjStack.push(j);	
+			{
+				adjStack.push(j);
+				if (wordBuffer[j + 1] == "and")
+					adjStack.push(j + 1);
+			}
 		}
-
+		start = objectIndices[i] + 1;
 		while (!adjStack.empty())
 		{
 			swap(wordBuffer[adjStack.top()], wordBuffer[objectIndices[i]]);
@@ -134,6 +142,8 @@ void Processor::directTranslate()
 {
 	string subject = "";
 	string compound[2] = { "", "" };
+	bool imperative = false;
+	bool gotAdjective = false;
 	bool qualityN[2] = { false, false };
 	for (auto word : wordBuffer) {
 
@@ -180,9 +190,11 @@ void Processor::directTranslate()
 
 				}
 			}
+
 			int index = compound[1].length() - 1;
-			if (string::npos != compound[1].find("(adj)"))
-				index = compound[1].find("(adj)")-1;
+			//if (string::npos != compound[1].find("(adj)"))
+			//	index = compound[1].find("(adj)")-1;
+
 
 			switch (compound[1][index])
 			{
@@ -193,7 +205,7 @@ void Processor::directTranslate()
 				compound[1].insert(index+1, "n");
 				break;
 			case 'a':
-				compound[1][index] = 'i';
+				//compound[1][index] = 'i';
 				compound[1].insert(index+1, "n");
 				break;
 
@@ -210,22 +222,37 @@ void Processor::directTranslate()
 		else
 			toPush = Processor::db.getErindin(word);
 		
+		if (string::npos != word.find("(")) {
 
-		if (string::npos != toPush.find("(pl)"))
-		{
-			auto i = toPush.find("(pl)");
-			translatedBuffer.push_back("mar");
-			toPush.erase(i, 4);
+			if (string::npos != word.find("(pl)"))
+				translatedBuffer.push_back("mar");
+			else if (string::npos != word.find("(cmp)")) 
+				translatedBuffer.push_back(Processor::db.getErindin("more"));
+
+			if (!gotAdjective && string::npos != word.find("(adj)")) {
+				translatedBuffer.push_back("av");
+				gotAdjective = true;
+			}
+			if (string::npos != word.find("(o)"))
+				gotAdjective = false;
+
+			if (string::npos != word.find("(spl)")) 
+				translatedBuffer.push_back("te mesdi");			
+			
+			if (string::npos != word.find("(imp)"))
+				imperative = true;
+
+			if (string::npos != word.find("(s)"))
+				subject = toPush;
+
 		}
-		else if (string::npos != toPush.find("(adj)"))
-		{
-			auto i = toPush.find("(adj)");
-			//translatedBuffer.push_back("av");
-			toPush.erase(i, 5);
-		}
-		if (string::npos != word.find("(s)"))
-			subject = toPush;
+
+		
 		translatedBuffer.push_back(toPush);
+		if (imperative){
+			translatedBuffer.push_back("nun");
+			imperative = false;
+		}
 		
 	}
 
@@ -254,13 +281,28 @@ void Processor::directTranslate()
 		}
 	}
 
-
+	//clean up any and all empty strings
+	stack<int> emptyStrings;
+	for (int i = 0; i < translatedBuffer.size(); i++)
+	{
+		if (translatedBuffer[i] == "")
+			emptyStrings.push(i);
+	}
+	while (!emptyStrings.empty())
+	{
+		translatedBuffer.erase(translatedBuffer.begin() + emptyStrings.top());
+		emptyStrings.pop();
+	}
+	
 	applyRules();
 
 }
 
 void Processor::applyRules()
 {
+	if (translatedBuffer.empty())
+		return;
+
 	//if 'av' is before the definite article 'te', or before a possessive, remove 'av'
 
 
@@ -300,6 +342,8 @@ void Processor::applyRules()
 		{
 			if (count - 1 < 0)
 				continue;
+			if (translatedBuffer[count - 1] == "")
+				continue;
 			string type = Processor::db.getType(translatedBuffer[count - 1]);
 			
 			if (string::npos != type.find("possessive"))
@@ -317,11 +361,15 @@ void Processor::applyRules()
 		}
 	}
 
+
+	translatedBuffer[0][0] = toupper(translatedBuffer[0][0]);
 }
 
 void Processor::print()
 {
+
 	for (auto word : translatedBuffer)
 		cout << word << " ";
+
 	cout << endl << endl;
 }

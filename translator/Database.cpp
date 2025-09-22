@@ -78,24 +78,29 @@ string Database::getEnglish(string erindin)
 }
 string Database::getErindin(string english)
 {
-	transform(english.begin(), english.end(), english.begin(), [](unsigned char c) {return tolower(c); });
-	bool plural = false;
-	bool adjective = false;
+	//transform(english.begin(), english.end(), english.begin(), [](unsigned char c) {return tolower(c); });
+	//bool plural = false;
+	//bool adjective = false;
 	bool singularPersonal = false;
 	bool pluralPersonal = false;
+	//bool comparator = false;
+	//bool superlative = false;
 
-	if (string::npos != english.find("(pl)"))
-		plural = true;
-	else if (string::npos != english.find("(adj)"))
-		adjective = true;
+	//if (string::npos != english.find("(pl)"))
+	//	plural = true;
+	//else if (string::npos != english.find("(adj)"))
+	//	adjective = true;
+
+	
+	//if (string::npos != english.find("(cmp)"))
+	//	comparator = true;
+	//else if (string::npos != english.find("(spl)"))
+	//	superlative = true;
 
 	if (string::npos != english.find("(pp)"))
 		pluralPersonal = true;
 	else if (string::npos != english.find("(sp)"))
 		singularPersonal = true;
-
-
-
 	bool verb = cleanWord(english);
 	
 
@@ -113,12 +118,17 @@ string Database::getErindin(string english)
 	delete s;
 	if (r->next())
 	{	
-		if (adjective)
-			return r->getString("erindin") + "(adj)";
+		string ret = r->getString("erindin");
+	/*	if (adjective)
+			ret += "(adj)";
 		else if (plural)
-			return r->getString("erindin") + "(pl)";
-		else
-			return r->getString("erindin");
+			ret += "(pl)";
+		else if (comparator)
+			ret += "(cmp)";
+		else if (superlative)
+			ret += "(spl)";*/
+		
+		return ret;
 		
 	}
 	else
@@ -154,17 +164,15 @@ void Database::adjustVerbs()
 bool Database::cleanWord(string& word)
 {
 	bool ret = false;
-	
-	for (auto suffix : specialSuffix)
-	{
-		auto i = word.find(suffix);
-		
-		if (i != string::npos)
-		{
-			word.erase(i, suffix.length());
-			if (suffix == "(v)")
-				ret = true;
-		}
+	auto j = word.find("(");
+	while (j != string::npos)
+	{		
+		auto k = word.find(")");
+		if (word.substr(j, (k - j)+1) == "(v)")
+			ret = true;
+		word.erase(j, (k - j) + 1);
+		j = word.find("(");
+
 	}
 	return ret;
 }

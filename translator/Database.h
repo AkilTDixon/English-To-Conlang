@@ -30,9 +30,11 @@ public:
 
 	void populateDatabase();
 	void adjustVerbs();
-private:
-	string specialSuffix[10] = { "(v)", "(s)", "(o)", "(f)", "(p)", "(pl)", "(adj)", "(sp)", "(pp)", "(q)"};
 	bool cleanWord(string&);
+private:
+	string specialSuffix[12] = { "(v)", "(s)", "(o)", "(f)", "(p)", 
+								"(pl)", "(adj)", "(sp)", "(pp)", "(q)",
+								"(cmp)", "(spl)"};
 };
 
 string getType(string s);

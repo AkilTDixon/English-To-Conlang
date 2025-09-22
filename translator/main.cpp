@@ -8,9 +8,9 @@ using namespace std;
 /*
 TO-DO
 
-Comparative
-Superlative
-Imperative
+Comparative (cmp) --DONE
+Superlative (spl) --DONE
+Imperative (imp) 
 Interrogative
 Noun Phrases (possessives. My mother's, my father's, the king's)
 Comma sentence breaks (In the heart of the sacred groves, we honor the hold ways.)
@@ -33,7 +33,7 @@ int main()
 
 		cout << "Enter a sentence(qq to quit): ";
 		getline(cin, input);
-
+		transform(input.begin(), input.end(), input.begin(), [](unsigned char c) {return tolower(c); });
 		if (input == "qq")
 			break;
 		//'to have' verb is special
