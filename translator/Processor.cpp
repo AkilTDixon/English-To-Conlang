@@ -54,6 +54,7 @@ void Processor::wordOrder()
 	if (!future)
 		past = wordBuffer[wordBuffer.size() - 1].find("(p)") != string::npos;
 
+	
 
 	//find all 'the'
 	for (int i = 0; i < wordBuffer.size(); i++)
@@ -323,6 +324,8 @@ void Processor::applyRules()
 			if (count + 1 < translatedBuffer.size())
 			{
 				type = Processor::db.getType(translatedBuffer[count + 1]);
+				if (type == "")
+					continue;
 				if (string::npos != type.find("possessive") || type == "definite article")
 					s.push(count);
 			}

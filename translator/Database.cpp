@@ -184,6 +184,7 @@ string Database::getType(string erindin)
 	if (r->next())
 		return r->getString("type");
 
+	return "";
 	delete s;
 }
 string getConjugation(string verb)
