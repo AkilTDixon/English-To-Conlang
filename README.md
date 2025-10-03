@@ -1,5 +1,4 @@
 # English-to-Erindin Translator
-**WORK-IN-PROGRESS**
 
 A C++ application that translates English phrases into **Erindin**, a constructed language (conlang) created by Frederico Schroeder. The translator respects the complex grammatical rules and word order of the Erindin language.
 
