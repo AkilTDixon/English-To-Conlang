@@ -2,7 +2,7 @@
 
 A C++ application that translates English phrases into **Erindin**, a constructed language (conlang) created by Frederico Schroeder. The translator respects the complex grammatical rules and word order of the Erindin language.
 
-## 🌟 Features
+## Features
 
 - **Intelligent Word Ordering**: Automatically rearranges English sentences to match Erindin grammar (Verb-Subject-Object structure)
 - **Compound Word Handling**: Processes hyphenated compound words with proper morphological rules
@@ -15,7 +15,7 @@ A C++ application that translates English phrases into **Erindin**, a constructe
   - Adjective positioning
   - Possessive pronoun rules
 
-## 🏗️ Architecture
+## Architecture
 
 The project consists of three main components:
 
@@ -33,35 +33,15 @@ The project consists of three main components:
 - **Special Suffixes**: Supports various grammatical markers like `(v)`, `(s)`, `(o)`, `(adj)`, `(pl)`
 - **Compound Words**: Able to produce compound words when using hyphenation for use in nicknaming, or name generation, like `red-hand`, `the silent-one`
 
-## 📋 Prerequisites
+## Prerequisites
 
 - **Visual Studio 2022** (v143 toolset)
 - **MySQL Server** (running on localhost:3306)
 - **MySQL Connector/C++** (configured in project settings)
 - **C++20** standard support
 
-## 🚀 Installation & Setup
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/AkilTDixon/English-To-Conlang.git
-   cd English-To-Conlang
-   ```
-
-2. **Set up MySQL Database**:
-   - Install and start MySQL Server
-   - Create a database named `dictionary`
-   - Create the `dict` table with columns: PRIMARY KEY `ID`, `erindin`, `english`, `type`
-
-3. **Configure MySQL Connector**:
-   - Update the include and library paths in `translator.vcxproj` to match your MySQL Connector installation
-   - Ensure the MySQL server credentials match those in `Database.cpp` (default: root with no password)
-
-4. **Build the Project**:
-   - Open `translator.sln` in Visual Studio 2022
-   - Build the solution (Debug or Release configuration)
-
-## 💻 Usage
+## Usage
 
 1. **Run the executable**:
    ```bash
@@ -80,7 +60,7 @@ The project consists of three main components:
 
 3. **View the Erindin translation** with proper grammar and word order
 
-## 📝 Example
+## Example
 
 **Input**: `"The cat(s) eats(v) the fish(o)"`
 
@@ -96,7 +76,7 @@ The project consists of three main components:
 3. Grammar rule application
 4. Final Erindin output
 
-## 🗃️ Database Schema
+## Database Schema
 
 The application expects a MySQL database with the following structure:
 
@@ -112,7 +92,7 @@ CREATE TABLE dict (
 );
 ```
 
-## 🔧 Configuration
+## Configuration
 
 ### Database Connection
 Update the connection parameters in `Database.cpp`:
@@ -126,13 +106,13 @@ Modify `translator.vcxproj` to match your MySQL Connector installation:
 - Library dependencies
 - Runtime libraries
 
-## 📚 Language Credits
+## Language Credits
 
 **Full credit for the Erindin constructed language goes to Frederico Schroeder.**
 
 This translator implements the grammatical rules and vocabulary of the Erindin language as designed by its creator.
 
-## 🛠️ Development
+## Development
 
 ### Project Structure
 ```
@@ -148,7 +128,7 @@ translator/
 - **Compound Processing**: Handles hyphenated words with morphological rules
 - **Grammar Rules**: Applies Erindin-specific grammatical constraints
 
-## 📄 License
+## License
 
 This personal project is for educational and linguistic research purposes only, for use as a third-party helper with phrase generation, and is not meant for distribution.
 
